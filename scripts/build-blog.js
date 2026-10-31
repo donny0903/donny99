@@ -247,8 +247,6 @@ const llms = [
     '',
     '- [LinkedIn](https://www.linkedin.com/in/donghwan-kim-52b7371a9/)',
     '- [X (@okid2318)](https://x.com/okid2318)',
-    '- [Medium](https://medium.com/@okid2318)',
-    '- [Brunch](https://brunch.co.kr/@okid2318)',
     '',
 ].join('\n');
 fs.writeFileSync(path.join(ROOT, 'llms.txt'), llms);
