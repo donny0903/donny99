@@ -1,0 +1,26 @@
+[
+    {
+        "slug": "2025_04_24",
+        "title": "As a Designer",
+        "subtitle": "Sir Jony Ive's 2021 CCA Commencement",
+        "thumbnail": "img/blog_article/2025_04_24/1.png",
+        "thumbnail_alt": "Sir Jony Ive",
+        "tags": ["Design", "Inspiration"]
+    },
+    {
+        "slug": "2026_06_01",
+        "title": "Mental aging",
+        "subtitle": "When you really get old",
+        "thumbnail": "img/blog_article/2026_06_01/2.jpg",
+        "thumbnail_alt": "Ernest Ansermet",
+        "tags": ["Inspiration", "Thinking"]
+    },
+    {
+        "slug": "2026_07_13",
+        "title": "A workforce splitting in two",
+        "subtitle": "Tech Worker Sentiment Survey 2026",
+        "thumbnail": "img/blog_article/2026_07_13/0.jpg",
+        "thumbnail_alt": "Tech Worker Sentiment Survey 2026",
+        "tags": ["Tech", "Thinking"]
+    }
+]

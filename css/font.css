@@ -8,6 +8,7 @@
          url('./fonts/Outfit/Outfit-Light.woff') format('woff');
     font-weight: 300;
     font-style: normal;
+    font-display: block;
     unicode-range: U+0020-007E; /* 영문 유니코드 범위 */
 }
 
@@ -17,6 +18,7 @@
          url('./fonts/Outfit/Outfit-Regular.woff') format('woff');
     font-weight: 400;
     font-style: normal;
+    font-display: block;
     unicode-range: U+0020-007E; /* 영문 유니코드 범위 */
 }
 
@@ -26,6 +28,7 @@
          url('./fonts/Outfit/Outfit-Medium.woff') format('woff');
     font-weight: 500;
     font-style: normal;
+    font-display: block;
     unicode-range: U+0020-007E; /* 영문 유니코드 범위 */
 }
 
@@ -35,6 +38,7 @@
          url('./fonts/Outfit/Outfit-SemiBold.woff') format('woff');
     font-weight: 600;
     font-style: normal;
+    font-display: block;
     unicode-range: U+0020-007E; /* 영문 유니코드 범위 */
 }
 
@@ -44,50 +48,11 @@
          url('./fonts/Outfit/Outfit-Bold.woff') format('woff');
     font-weight: 700;
     font-style: normal;
+    font-display: block;
     unicode-range: U+0020-007E; /* 영문 유니코드 범위 */
 }
 
-/* Pretendard */
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url('./fonts/Pretendard/Pretendard-Light.woff2') format('woff2'),
-         url('./fonts/Pretendard/Pretendard-Light.woff') format('woff');
-    font-weight: 300;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url('./fonts/Pretendard/Pretendard-Regular.woff2') format('woff2'),
-         url('./fonts/Pretendard/Pretendard-Regular.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url('./fonts/Pretendard/Pretendard-Medium.woff2') format('woff2'),
-         url('./fonts/Pretendard/Pretendard-Medium.woff') format('woff');
-    font-weight: 500;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url('./fonts/Pretendard/Pretendard-SemiBold.woff2') format('woff2'),
-         url('./fonts/Pretendard/Pretendard-SemiBold.woff') format('woff');
-    font-weight: 600;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'Pretendard';
-    src: url('./fonts/Pretendard/Pretendard-Bold.woff2') format('woff2'),
-         url('./fonts/Pretendard/Pretendard-Bold.woff') format('woff');
-    font-weight: 700;
-    font-style: normal;
-}
+/* Pretendard: css/pretendard.css */
 
 /* Libre Baskerville */
 
@@ -97,4 +62,15 @@
          url('./fonts/Libre_Baskerville/LibreBaskerville-Regular.woff') format('woff');
     font-weight: 400;
     font-style: normal;
+    font-display: block;
+}
+
+/* Fraunces Italic (Google Fonts, OFL: ./fonts/Fraunces/OFL.txt) — English-only post titles */
+@font-face {
+    font-family: 'Fraunces';
+    src: url('./fonts/Fraunces/Fraunces-Italic-latin.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: italic;
+    font-display: block;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
