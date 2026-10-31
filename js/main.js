@@ -194,6 +194,18 @@ function initProjectPreview() {
     });
 }
 
+// footer 이메일: 주소를 거꾸로 나눠 둔 조각을 누를 때 조립한다. 페이지 소스에 주소가 그대로 없어서 수집 봇이 못 가져간다
+function initEmailLink() {
+    const link = document.querySelector('.email-link');
+    if (!link) return;
+
+    const reverse = (s) => s.split('').reverse().join('');
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.location.href = `mailto:${reverse(link.dataset.u)}@${reverse(link.dataset.d)}`;
+    });
+}
+
 // 현재 페이지 메뉴 하이라이트 기능
 function initNavHighlight() {
     const currentPath = window.location.pathname;
@@ -311,6 +323,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initProjectPreview();
     initNavHighlight();
     initLangSwitch();
+    initEmailLink();
     initHashLinks();
     initWorkTabs();
     await Promise.all([
