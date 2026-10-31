@@ -1,41 +1,104 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
     <head>
-        <!-- 기본설정 -->
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-        <meta name="description" content="Product Designer Donny">
-        <meta name="keywords" content="UX/UI, Product Designer, Design, Donny, Donny Kim, Donghwan Kim">
-        <meta name="author" content="Donghwan Kim, 김동환">
+        <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+        <title>김동환 (Donny) | Product Designer & Builder</title>
+        <meta name="description" content="프로덕트 디자이너이자 Builder 김동환(Donny)의 포트폴리오와 블로그. 지속 가능함과 사려 깊음, 일에서의 재미를 추구합니다.">
+        <meta name="author" content="Donghwan Kim (김동환)">
+        <meta name="robots" content="index, follow, max-image-preview:large">
+        <!-- 언어판: 같은 페이지의 한국어 · 영어판을 서로 알린다 -->
+        <link rel="canonical" href="https://aboutdonny.com/">
+        <link rel="alternate" hreflang="ko" href="https://aboutdonny.com/">
+        <link rel="alternate" hreflang="en" href="https://aboutdonny.com/en/">
+        <link rel="alternate" hreflang="x-default" href="https://aboutdonny.com/en/">
         <!-- Favicon -->
         <link rel="icon" type="image/x-icon" href="../img/favicon_package/favicon.ico">
         <link rel="icon" type="image/svg+xml" href="../img/favicon_package/favicon.svg">
         <link rel="apple-touch-icon" sizes="180x180" href="../img/favicon_package/favicon-180.png">
         <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon_package/favicon-32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="../img/favicon_package/favicon-16.png">
-        <!-- Open Graph / Facebook -->
+        <!-- Open Graph / X -->
         <meta property="og:type" content="website">
-        <meta property="og:title" content="About Donny">
-        <meta property="og:description" content="Product Designer, 일과 삶을 기록합니다.">
-        <meta property="og:image" content="../img/profile.jpg">
-        <meta property="og:url" content="https://www.aboutdonny.com/index.html">
-        <!-- 소셜 미디어 추가 메타 태그 -->
-        <meta name="twitter:card" content="../img/profile.jpg">
+        <meta property="og:site_name" content="About Donny">
+        <meta property="og:locale" content="ko_KR">
+        <meta property="og:locale:alternate" content="en_US">
+        <meta property="og:title" content="김동환 (Donny) | Product Designer & Builder">
+        <meta property="og:description" content="프로덕트 디자이너이자 Builder 김동환(Donny)의 포트폴리오와 블로그. 지속 가능함과 사려 깊음, 일에서의 재미를 추구합니다.">
+        <meta property="og:image" content="https://aboutdonny.com/img/profile.jpg">
+        <meta property="og:url" content="https://aboutdonny.com/">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@okid2318">
         <meta name="twitter:creator" content="@okid2318">
-        <!-- 보안 관련 -->
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- 보안 -->
         <meta http-equiv="Content-Security-Policy" content="default-src 'self'">
-        <!-- SEO 최적화 추가 -->
-        <meta name="robots" content="index, follow">
-        <link rel="canonical" href="https://www.aboutdonny.com/index.html">
-        <!-- language section -->
-        <!-- <link rel="alternate" hreflang="en" href="https://www.aboutdonny.com/2.en/index.html">
-        <link rel="alternate" hreflang="ko" href="https://www.aboutdonny.com/1.ko/index.html"> -->
         <!-- link section -->
+        <link rel="stylesheet" href="../css/pretendard.css">
         <link rel="stylesheet" href="../css/font.css">
         <link rel="stylesheet" href="../css/main.css">
+        <script src="../js/lang.js"></script>
         <script src="../js/main.js" defer></script>
-        <title>About Donny Kim</title>
+        <!-- 구조화 데이터 (검색 · AI 답변 엔진용) -->
+        <script type="application/ld+json">
+            {
+              "@context": "https://schema.org",
+              "@graph": [
+                {
+                  "@type": "Person",
+                  "@id": "https://aboutdonny.com/#person",
+                  "name": "Donghwan Kim",
+                  "alternateName": [
+                    "Donny Kim",
+                    "Donny",
+                    "김동환"
+                  ],
+                  "jobTitle": [
+                    "Product Designer",
+                    "Builder"
+                  ],
+                  "description": "프로덕트 디자이너이자 Builder. Match Group(Azar), 스포카, 숨고, 오늘의꽃에서 B2B SaaS, 로컬 서비스 마켓플레이스, 커머스 제품을 디자인했고, 지금은 AI 도구로 제품을 직접 만든다.",
+                  "url": "https://aboutdonny.com/",
+                  "image": "https://aboutdonny.com/img/profile.jpg",
+                  "sameAs": [
+                    "https://www.linkedin.com/in/donghwan-kim-52b7371a9/",
+                    "https://x.com/okid2318",
+                    "https://medium.com/@okid2318",
+                    "https://brunch.co.kr/@okid2318",
+                    "https://github.com/donny0903"
+                  ],
+                  "knowsAbout": [
+                    "Product design",
+                    "UX design",
+                    "B2B SaaS",
+                    "Marketplaces",
+                    "E-commerce",
+                    "AI-assisted development",
+                    "iOS app development"
+                  ],
+                  "knowsLanguage": [
+                    "ko",
+                    "en"
+                  ]
+                },
+                {
+                  "@type": "WebSite",
+                  "@id": "https://aboutdonny.com/#website",
+                  "name": "About Donny",
+                  "url": "https://aboutdonny.com/",
+                  "inLanguage": [
+                    "ko",
+                    "en"
+                  ],
+                  "author": {
+                    "@id": "https://aboutdonny.com/#person"
+                  },
+                  "publisher": {
+                    "@id": "https://aboutdonny.com/#person"
+                  }
+                }
+              ]
+            }
+        </script>
     </head>
     <body class="page-index">
         <!-- navbar section -->
@@ -102,7 +165,7 @@
         </section>
         <!-- divider (space)
         <div class="work-divider">
-            <img src="../img/icon/divider.png" alt="Section divider">
+            <img src="../img/icon/divider.png" alt="Section divider" width="108" height="12">
         </div>
         -->
         <!-- space section
@@ -119,7 +182,7 @@
         -->
         <!-- divider -->
         <div class="work-divider">
-            <img src="../img/icon/divider.png" alt="Section divider">
+            <img src="../img/icon/divider.png" alt="Section divider" width="108" height="12">
         </div>
         <!-- blog section -->
         <section class="projects">

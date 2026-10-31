@@ -1,3 +1,7 @@
+// 언어: /en/ 아래 페이지는 영어판, 나머지는 한국어판. 공용 파일(components, img)은 사이트 루트에 있다
+const IS_EN = /^\/en(\/|$)/.test(window.location.pathname);
+const LANG_ROOT = IS_EN ? '/en/' : '/';
+
 // 로컬 라이브 리로드 시 스크롤 위치 유지 (프로덕션·배포 호스트에서는 비활성)
 function isLocalDevHost() {
     const h = window.location.hostname;
@@ -15,8 +19,14 @@ function saveDevScrollPosition() {
     } catch (e) {}
 }
 
+// 새로고침(라이브 리로드)일 때만 되살린다. 링크로 들어온 페이지는 맨 위에서 시작
+function isReloadNavigation() {
+    const nav = performance.getEntriesByType('navigation')[0];
+    return nav ? nav.type === 'reload' : false;
+}
+
 function restoreDevScrollPosition() {
-    if (!isLocalDevHost()) return;
+    if (!isLocalDevHost() || !isReloadNavigation()) return;
     let y;
     try {
         const raw = sessionStorage.getItem(devScrollStorageKey());
@@ -39,6 +49,16 @@ async function loadPartial(selector, url) {
         if (!response.ok) return;
         const html = await response.text();
         container.innerHTML = html;
+
+        // 조각 안의 페이지 링크(work.html 등)는 현재 언어판 기준, 이미지는 조각 파일 기준으로 맞춘다.
+        // blog/ 처럼 한 단계 깊은 페이지에서도 같은 조각을 쓰기 위해서다
+        container.querySelectorAll('a[href]').forEach((a) => {
+            const href = a.getAttribute('href');
+            if (!/^([a-z]+:|\/|#)/i.test(href)) a.setAttribute('href', LANG_ROOT + href);
+        });
+        container.querySelectorAll('img[src]').forEach((img) => {
+            img.setAttribute('src', new URL(img.getAttribute('src'), new URL(url, window.location.origin)).pathname);
+        });
     } catch (e) {
         // 네트워크 오류 등은 조용히 무시
     }
@@ -68,17 +88,78 @@ function initMobileMenu() {
 }
 
 // work 아코디언 토글
+// 기본은 모두 접힘. 펼친 카드는 sessionStorage 에 기억해 새로고침해도 유지한다(새 방문이면 다시 접힘).
+const WORK_OPEN_KEY = 'work-open-items';
+
+function readOpenWorkItems() {
+    try {
+        return new Set(JSON.parse(sessionStorage.getItem(WORK_OPEN_KEY) || '[]'));
+    } catch (e) {
+        return new Set();
+    }
+}
+
+function writeOpenWorkItems(openItems) {
+    try {
+        sessionStorage.setItem(WORK_OPEN_KEY, JSON.stringify([...openItems]));
+    } catch (e) {
+        // storage 를 못 쓰면 기억하지 않을 뿐, 토글은 그대로 동작한다
+    }
+}
+
+function workItemKey(workItem) {
+    const title = workItem.querySelector('.work-header h2');
+    return title ? title.textContent.replace(/\s+/g, ' ').trim() : '';
+}
+
 function initWorkAccordion() {
-    document.querySelectorAll('.chevron-button').forEach((button) => {
+    const openItems = readOpenWorkItems();
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    document.querySelectorAll('button.chevron-button').forEach((button) => {
+        const workItem = button.closest('.work-item');
+        if (!workItem) return;
+
+        const content = workItem.querySelector('.collapsible-content');
+        if (!content) return;
+
+        const key = workItemKey(workItem);
+
+        if (openItems.has(key)) {
+            button.classList.add('no-anim', 'open');
+            content.classList.add('no-anim', 'open');
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                button.classList.remove('no-anim');
+                content.classList.remove('no-anim');
+            }));
+        }
+
+        // 애니메이션이 끝나면 인라인 높이를 지워 CSS 값(펼침 none, 접힘 0)으로 돌려 둔다
+        content.addEventListener('transitionend', (e) => {
+            if (e.target === content && e.propertyName === 'max-height') {
+                content.style.maxHeight = '';
+            }
+        });
+
         button.addEventListener('click', () => {
-            const workItem = button.closest('.work-item');
-            if (!workItem) return;
+            const isOpen = !content.classList.contains('open');
 
-            const content = workItem.querySelector('.collapsible-content');
-            if (!content) return;
+            if (reduceMotion.matches) {
+                content.classList.toggle('open', isOpen);
+            } else {
+                // 지금 보이는 높이에서 출발해 목표 높이(펼침: 내용 높이, 접힘: 0)로 간다.
+                // 애니메이션 도중에 다시 눌러도 튀지 않는다
+                content.style.maxHeight = content.getBoundingClientRect().height + 'px';
+                content.offsetHeight; // 시작 높이를 확정
+                content.classList.toggle('open', isOpen);
+                content.style.maxHeight = isOpen ? content.scrollHeight + 'px' : '0px';
+            }
+            button.classList.toggle('open', isOpen);
 
-            button.classList.toggle('active');
-            content.classList.toggle('active');
+            const current = readOpenWorkItems();
+            if (isOpen) current.add(key);
+            else current.delete(key);
+            writeOpenWorkItems(current);
         });
     });
 }
@@ -92,7 +173,7 @@ function initProjectPreview() {
     document.body.appendChild(preview);
 
     // 프로젝트 프리뷰 대상: 상세 리스트(h3) + 헤더 타이틀(h1)
-    document.querySelectorAll('.work-body-item h3, .work-header h1[data-image-name]').forEach((title) => {
+    document.querySelectorAll('.work-body-item h3, .work-header h2[data-image-name]').forEach((title) => {
         const imageName = title.getAttribute('data-image-name');
 
         if (imageName) {
@@ -121,7 +202,7 @@ function initNavHighlight() {
     let activeKey = null;
     if (currentPath.includes('work.html')) {
         activeKey = 'work';
-    } else if (currentPath.includes('blog_article')) {
+    } else if (currentPath.includes('blog_article') || currentPath.includes('/blog/')) {
         activeKey = 'blog';
     } else if (currentPath.includes('about.html')) {
         activeKey = 'about';
@@ -137,6 +218,24 @@ function initNavHighlight() {
     });
 }
 
+// 언어 전환 링크: 한국어판에서는 en, 영어판에서는 kr 로 같은 페이지의 다른 언어판을 가리킨다
+function initLangSwitch() {
+    const link = document.querySelector('.lang-switch');
+    if (!link) return;
+
+    const path = window.location.pathname;
+    link.textContent = IS_EN ? 'kr' : 'en';
+    link.href = (IS_EN ? path.replace(/^\/en(\/|$)/, '/') : '/en' + path) + window.location.search;
+    link.hreflang = IS_EN ? 'ko' : 'en';
+
+    // 직접 고른 언어를 기억해 두면 lang.js 가 브라우저 언어보다 이걸 따른다
+    link.addEventListener('click', () => {
+        try {
+            localStorage.setItem('lang', link.hreflang);
+        } catch (e) {}
+    });
+}
+
 // href="#"인 링크 클릭 시 경고 모달 표시 (임시 링크 막기 용도)
 function initHashLinks() {
     const hashLinks = document.querySelectorAll('a[href="#_work"]');
@@ -144,7 +243,9 @@ function initHashLinks() {
     hashLinks.forEach((link) => {
         link.addEventListener('click', (e) => {
             e.preventDefault(); // 기본 동작 방지
-            alert('자세한 내용이 궁금하시다면 링크드인 또는 메일로 연락주세요 😄');
+            alert(IS_EN
+                ? 'Want the details? Reach out on LinkedIn or by email 😄'
+                : '자세한 내용이 궁금하시다면 링크드인 또는 메일로 연락주세요 😄');
         });
     });
 }
@@ -200,15 +301,16 @@ function initWorkTabs() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     await Promise.all([
-        loadPartial('#topNavigation', 'components/topNavigation.html'),
-        loadPartial('#footer', 'components/footer.html'),
-        loadPartial('#workTabs', 'components/workTabs.html'),
+        loadPartial('#topNavigation', '/components/topNavigation.html'),
+        loadPartial('#footer', '/components/footer.html'),
+        loadPartial('#workTabs', '/components/workTabs.html'),
     ]);
 
     initMobileMenu();
     initWorkAccordion();
     initProjectPreview();
     initNavHighlight();
+    initLangSwitch();
     initHashLinks();
     initWorkTabs();
     await Promise.all([
@@ -216,7 +318,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         initBlogArticleGrid('indexBlogGrid', 5),
         // initBlogSpaceGrid('spaceGrid'),
         // initBlogSpaceGrid('indexSpaceGrid'),
-        initBlogPost(),
     ]);
     restoreDevScrollPosition();
 });
@@ -267,20 +368,20 @@ async function initBlogArticleGrid(gridId, limit) {
     if (!grid) return;
 
     try {
-        const res = await fetch('blog_article/index.json');
+        const res = await fetch(`${LANG_ROOT}blog_article/index.json`);
         if (!res.ok) return;
         const posts = sortPostsByDateDesc(await res.json());
 
         const visiblePosts = Number.isInteger(limit) ? posts.slice(0, limit) : posts;
 
         for (const post of visiblePosts) {
-            const title = await getPostTitle(post, 'blog_article');
+            const title = await getPostTitle(post, `${LANG_ROOT}blog_article`);
             const date = formatDateFromSlug(post.slug);
             const subtitle = post.subtitle || '';
 
             const item = document.createElement('a');
             item.className = 'blog-list-item';
-            item.href = `blog_article_post.html?slug=${post.slug}`;
+            item.href = `${LANG_ROOT}blog/${post.slug}.html`; // scripts/build-blog.js 가 만든 정적 글
             item.innerHTML = `
                 <span class="blog-list-date">${date}</span>
                 <span class="blog-list-title">${title}</span>
@@ -324,132 +425,3 @@ async function initBlogArticleGrid(gridId, limit) {
 //         // 로드 실패 시 조용히 무시
 //     }
 // }
-
-// 블로그 상세 페이지 MD 렌더링 (article / space 공용)
-async function initBlogPost() {
-    const contentContainer = document.querySelector('.blog-post-content');
-    if (!contentContainer) return;
-
-    const params = new URLSearchParams(window.location.search);
-    const slug = params.get('slug');
-    if (!slug) return;
-
-    const source = contentContainer.dataset.source || 'blog_article';
-
-    // index.json에서 메타데이터 조회
-    let postMeta = null;
-    try {
-        const indexRes = await fetch(`${source}/index.json`);
-        if (indexRes.ok) {
-            const posts = await indexRes.json();
-            postMeta = posts.find(p => p.slug === slug);
-        }
-    } catch (e) {}
-
-    // SEO 메타 태그 동적 업데이트
-    if (postMeta) {
-        const title = postMeta.title || '';
-        const subtitle = postMeta.subtitle || '';
-        const date = formatDateFromSlug(slug);
-        const baseUrl = 'https://www.aboutdonny.com';
-        const pageFile = source === 'blog_space' ? 'blog_space_post.html' : 'blog_article_post.html';
-        const fullUrl = `${baseUrl}/${pageFile}?slug=${slug}`;
-        const imageUrl = postMeta.thumbnail ? `${baseUrl}/${postMeta.thumbnail}` : `${baseUrl}/img/profile.jpg`;
-
-        document.title = `${title} — About Donny`;
-
-        const setMeta = (attr, key, value) => {
-            const el = document.querySelector(`meta[${attr}="${key}"]`);
-            if (el) el.setAttribute('content', value);
-        };
-
-        setMeta('name', 'description', subtitle || title);
-        setMeta('property', 'og:title', title);
-        setMeta('property', 'og:description', subtitle);
-        setMeta('property', 'og:image', imageUrl);
-        setMeta('property', 'og:url', fullUrl);
-        setMeta('name', 'twitter:card', 'summary_large_image');
-
-        const canonical = document.querySelector('link[rel="canonical"]');
-        if (canonical) canonical.setAttribute('href', fullUrl);
-
-        // JSON-LD 구조화 데이터
-        const jsonLd = {
-            '@context': 'https://schema.org',
-            '@type': 'Article',
-            headline: title,
-            description: subtitle,
-            image: imageUrl,
-            datePublished: slug.replace(/_/g, '-'),
-            url: fullUrl,
-            author: {
-                '@type': 'Person',
-                name: 'Donghwan Kim'
-            }
-        };
-        const script = document.createElement('script');
-        script.type = 'application/ld+json';
-        script.textContent = JSON.stringify(jsonLd);
-        document.head.appendChild(script);
-    }
-
-    // hero 이미지
-    const heroImg = document.querySelector('.blog-post-hero img');
-    if (heroImg && postMeta?.thumbnail) {
-        heroImg.src = postMeta.thumbnail;
-        heroImg.alt = postMeta.title || '';
-    } else if (heroImg) {
-        heroImg.closest('.blog-post-hero').style.display = 'none';
-    }
-
-    // 날짜
-    const dateContainer = document.querySelector('.blog-post-date');
-    if (dateContainer) {
-        dateContainer.textContent = formatDateFromSlug(slug);
-    }
-
-    // 부제목
-    const subtitleContainer = document.querySelector('.blog-post-subtitle');
-    if (subtitleContainer && postMeta?.subtitle) {
-        subtitleContainer.textContent = postMeta.subtitle;
-    }
-
-    // 마크다운 렌더링
-    try {
-        const res = await fetch(`${source}/${slug}.md`);
-        if (!res.ok) {
-            contentContainer.innerHTML = '<p>글을 찾을 수 없습니다.</p>';
-            return;
-        }
-        const md = await res.text();
-        contentContainer.innerHTML = marked.parse(md);
-
-        const titleContainer = document.querySelector('.blog-post-title');
-        if (titleContainer && postMeta?.title) {
-            titleContainer.textContent = postMeta.title;
-        }
-
-        const h1 = contentContainer.querySelector('h1');
-        if (h1) h1.remove();
-
-        contentContainer.querySelectorAll('a').forEach(a => {
-            a.setAttribute('target', '_blank');
-            a.setAttribute('rel', 'noopener noreferrer');
-        });
-
-        contentContainer.querySelectorAll('blockquote br').forEach(br => {
-            const spacer = document.createElement('span');
-            spacer.className = 'br-spacer';
-            br.replaceWith(spacer);
-        });
-
-        contentContainer.querySelectorAll('hr').forEach(hr => {
-            const divider = document.createElement('div');
-            divider.className = 'work-divider';
-            divider.innerHTML = '<img src="img/icon/divider.png" alt="divider">';
-            hr.replaceWith(divider);
-        });
-    } catch (e) {
-        contentContainer.innerHTML = '<p>글을 불러오는 중 오류가 발생했습니다.</p>';
-    }
-}
