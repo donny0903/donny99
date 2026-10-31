@@ -1,0 +1,10 @@
+# aboutdonny.com
+# 검색 엔진과 AI 답변 엔진(GPTBot, ClaudeBot, PerplexityBot, Google-Extended 등) 모두 허용한다
+User-agent: *
+Allow: /
+Disallow: /archive/
+Disallow: /md/
+Disallow: /Rules/
+Disallow: /scripts/
+
+Sitemap: https://aboutdonny.com/sitemap.xml

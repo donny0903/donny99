@@ -1,0 +1,28 @@
+# About Donny: Donghwan (Donny) Kim
+
+> Donghwan (Donny) Kim (김동환) is a product designer and builder who designed B2B SaaS, local services marketplace, and e-commerce products at Match Group (Azar), Spoqa, Soomgo, and Oflower, and now builds products end to end with AI tools. The site is available in Korean and English.
+
+## Pages
+
+- [Work (English)](https://aboutdonny.com/en/work.html): career history and projects
+- [Work (Korean)](https://aboutdonny.com/work.html): 경력과 프로젝트
+- [About (English)](https://aboutdonny.com/en/about.html)
+- [About (Korean)](https://aboutdonny.com/about.html)
+- [Blog (English)](https://aboutdonny.com/en/blog_article.html)
+- [Blog (Korean)](https://aboutdonny.com/blog_article.html)
+
+## Blog posts
+
+- [A workforce splitting in two](https://aboutdonny.com/en/blog/2026_07_13.html) (2026-07-13, English): Tech Worker Sentiment Survey 2026
+- [A workforce splitting in two](https://aboutdonny.com/blog/2026_07_13.html) (2026-07-13, Korean): Tech Worker Sentiment Survey 2026
+- [Mental aging](https://aboutdonny.com/en/blog/2026_06_01.html) (2026-06-01, English): When you really get old
+- [정신적 노화](https://aboutdonny.com/blog/2026_06_01.html) (2026-06-01, Korean): 정말로 늙는 순간
+- [As a Designer](https://aboutdonny.com/en/blog/2025_04_24.html) (2025-04-24, English): Sir Jony Ive's 2021 CCA Commencement
+- [As a Designer](https://aboutdonny.com/blog/2025_04_24.html) (2025-04-24, Korean): Sir Jony Ive's 2021 CCA Commencement
+
+## Elsewhere
+
+- [LinkedIn](https://www.linkedin.com/in/donghwan-kim-52b7371a9/)
+- [X (@okid2318)](https://x.com/okid2318)
+- [Medium](https://medium.com/@okid2318)
+- [Brunch](https://brunch.co.kr/@okid2318)
